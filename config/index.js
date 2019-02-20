@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/wsmanagement':{
-        target:'http://192.168.1.97:8001/',
+      '/api':{
+        target:'http://localhost:8001/',
         changeOrigin:true,
         pathRewrite:{
-          '^/wsmanagement':'/wsmanagement'
+          '^/api':'/api'
         }
       }
     },
@@ -23,7 +23,7 @@ module.exports = {
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8089, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-

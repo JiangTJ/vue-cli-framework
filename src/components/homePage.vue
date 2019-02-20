@@ -6,8 +6,8 @@
           <div class="layout-logo"></div>
           <div class="layout-nav">
             <MenuItem name="1">
-              <Icon type="ios-navigate"></Icon>
-              Item 1
+              <Icon type="ios-person"></Icon>
+              {{userAccount}}
             </MenuItem>
             <MenuItem name="2">
               <Icon type="ios-keypad"></Icon>
@@ -17,49 +17,38 @@
               <Icon type="ios-analytics"></Icon>
               Item 3
             </MenuItem>
-            <MenuItem name="4">
-              <Icon type="ios-paper"></Icon>
-              Item 4
+            <MenuItem name="4" @click.native="logOut()">
+              <Icon type="power"></Icon>
+              注销
             </MenuItem>
           </div>
         </Menu>
       </Header>
       <Layout>
         <Sider hide-trigger :style="{background: '#fff'}">
-          <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']" @on-select="breadRoute">
+          <Menu accordion active-name="1-2" theme="light" width="auto" :open-names="['1']" @on-select="breadRoute">
             <Submenu name="1">
               <template slot="title">
+                <Icon type="ios-home"></Icon>
+                首页
+              </template>
+              <MenuItem name="首页" @click.native="route('/welcome')">首页</MenuItem>
+            </Submenu>
+            <Submenu name="2" v-hasPermission="'admin'">
+              <template slot="title">
                 <Icon type="ios-navigate"></Icon>
-                账号管理
+                基本
               </template>
-              <MenuItem name="账号管理/权限管理" @click.native="route('/adminPermission')">权限管理</MenuItem>
-              <MenuItem name="账号管理/角色配置" @click.native="route('/roleConfig')">角色配置</MenuItem>
-              <MenuItem name="1-3">Option 3</MenuItem>
-              <MenuItem name="1-4">Option 4</MenuItem>
+              <MenuItem name="基本/分页" @click.native="route('/example/paging')">分页</MenuItem>
+              <MenuItem name="基本/导出Csv" @click.native="route('/example/export_csv')">导出Csv</MenuItem>
             </Submenu>
-            <Submenu name="2">
+            <Submenu name="3" v-hasPermission="'admin'">
               <template slot="title">
-                <Icon type="ios-keypad"></Icon>
-                Item 2
+                <Icon type="ios-navigate"></Icon>
+                图表
               </template>
-              <MenuItem name="2-1">Option 1</MenuItem>
-              <MenuItem name="2-2">Option 2</MenuItem>
-            </Submenu>
-            <Submenu name="3">
-              <template slot="title">
-                <Icon type="ios-analytics"></Icon>
-                Item 3
-              </template>
-              <MenuItem name="3-1">Option 1</MenuItem>
-              <MenuItem name="3-2">Option 2</MenuItem>
-            </Submenu>
-            <Submenu name="4">
-              <template slot="title">
-                <Icon type="ios-analytics"></Icon>
-                Item 4
-              </template>
-              <MenuItem name="4-1">Option 1</MenuItem>
-              <MenuItem name="4-2">Option 2</MenuItem>
+              <MenuItem name="图表/折线图" @click.native="route('/example/echarts/basic_line')">折线图</MenuItem>
+              <MenuItem name="图表/饼图" @click.native="route('/example/echarts/basic_pie')">饼图</MenuItem>
             </Submenu>
           </Menu>
         </Sider>
@@ -86,7 +75,8 @@
     name: 'homePage',
     data () {
       return {
-        breadcrumb: ['清衣舍管理后台']    // 面包屑导航
+        breadcrumb: ['清衣舍管理后台'],    // 面包屑导航
+        userAccount: sessionStorage.userAccount    // 用户
       }
     },
     methods: {
@@ -95,6 +85,12 @@
       },
       breadRoute: function (name) {
         this.breadcrumb = name.split('/')
+      },
+      // 注销
+      logOut: function () {
+        sessionStorage.removeItem('userAccount')
+        sessionStorage.removeItem('permissions')
+        this.$router.push('/')
       }
     }
   }
